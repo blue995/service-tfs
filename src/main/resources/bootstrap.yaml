@@ -1,0 +1,14 @@
+info:
+  build:
+    name: Tfs Service
+    description: ReportPortal Tfs Integration
+    version: '@version@'
+    branch: '@branch@'
+    repo: '@repo@'
+
+spring:
+  profiles:
+    ## Default one is still Eureka
+    active: ${rp.profiles:default}
+  application:
+    name: tfs
