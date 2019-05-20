@@ -1,0 +1,15 @@
+.gradle/
+.idea/
+
+build/
+
+.travis.yml
+.dockerignore
+.gitignore
+
+CHANGELOG.md
+LICENSE
+README.md
+service-tfs.iml
+
+
