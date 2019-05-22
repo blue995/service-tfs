@@ -35,7 +35,7 @@ ENV JAVA_APP=/app.jar
 
 RUN echo $'#!/bin/sh \n\
 exec java $JAVA_OPTS -jar $JAVA_APP' > /start.sh && chmod +x /start.sh
-COPY --from=build /usr/src/app/build/libs/service-tfs-$version.jar $JAVA_APP
+COPY --from=build /usr/src/app/build/libs/service-delegation-$version.jar $JAVA_APP
 
 EXPOSE 8080
 ENTRYPOINT ["/start.sh"]

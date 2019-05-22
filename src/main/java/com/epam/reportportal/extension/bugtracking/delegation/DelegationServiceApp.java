@@ -18,40 +18,45 @@
  * You should have received a copy of the GNU General Public License
  * along with Report Portal.  If not, see <http://www.gnu.org/licenses/>.
  */ 
-package com.epam.reportportal.extension.bugtracking.tfs;
+package com.epam.reportportal.extension.bugtracking.delegation;
 
 import com.epam.reportportal.commons.template.FreemarkerTemplateEngine;
 import com.epam.reportportal.commons.template.TemplateEngine;
 import com.epam.reportportal.extension.bugtracking.BugTrackingApp;
 import com.epam.reportportal.extension.bugtracking.ExternalSystemStrategy;
+import com.epam.reportportal.extension.bugtracking.delegation.services.DelegationStrategy;
 import com.google.common.base.Charsets;
 import freemarker.template.TemplateExceptionHandler;
 import freemarker.template.Version;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.Locale;
 
 /**
- * Entry point for Rally integration service
+ * Entry point for an abstract integration service
  *
  * @author Andrei Varabyeu
  */
-public class TfsServiceApp extends BugTrackingApp {
+@ComponentScan
+public class DelegationServiceApp extends BugTrackingApp {
+
+	@Autowired
+	private DelegationStrategy myStrategy;
 
 	@Override
 	public ExternalSystemStrategy externalSystemStrategy() {
-		return new TfsStrategy();
-
+		return myStrategy;
 	}
 
 	@Bean
 	public TemplateEngine getTemplateEngine() {
-
 		Version version = new Version(2, 3, 25);
 		freemarker.template.Configuration cfg = new freemarker.template.Configuration(version);
 
-		cfg.setClassForTemplateLoading(TfsServiceApp.class, "/");
+		cfg.setClassForTemplateLoading(DelegationServiceApp.class, "/");
 
 		cfg.setIncompatibleImprovements(version);
 		cfg.setDefaultEncoding(Charsets.UTF_8.toString());
@@ -62,6 +67,6 @@ public class TfsServiceApp extends BugTrackingApp {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(TfsServiceApp.class);
+		SpringApplication.run(DelegationServiceApp.class, args);
 	}
 }
