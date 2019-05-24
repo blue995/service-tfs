@@ -1,6 +1,7 @@
 package com.epam.reportportal.extension.bugtracking.delegation.services;
 
 import com.epam.ta.reportportal.database.entity.ExternalSystem;
+import com.epam.ta.reportportal.ws.model.externalsystem.AllowedValue;
 import com.epam.ta.reportportal.ws.model.externalsystem.PostFormField;
 import com.epam.ta.reportportal.ws.model.externalsystem.PostTicketRQ;
 import com.epam.ta.reportportal.ws.model.externalsystem.Ticket;
@@ -38,6 +39,52 @@ public class TfsExternalApi implements IExternalSystemApi{
         field.setFieldType("text");
         field.setIsRequired(true);
         fields.add(field);
+
+        field = new PostFormField();
+        field.setId("age");
+        field.setFieldName("Age");
+        field.setFieldType("Double");
+        field.setIsRequired(true);
+        List<AllowedValue> values = new LinkedList<>();
+        values.add(new AllowedValue("1", "33.1"));
+        values.add(new AllowedValue("2", "33.2"));
+        values.add(new AllowedValue("3", "33.3"));
+        values.add(new AllowedValue("4", "33.4"));
+        field.setDefinedValues(values);
+        fields.add(field);
+
+        field = new PostFormField();
+        field.setId("age1");
+        field.setFieldName("Age1");
+        field.setFieldType("Double");
+        field.setIsRequired(true);
+        List<String> values1 = new LinkedList<>();
+        values1.add("1");
+        values1.add("2");
+        values1.add("3");
+        values1.add("4");
+        field.setValue(values1);
+        fields.add(field);
+
+        field = new PostFormField();
+        field.setId("combi");
+        field.setFieldName("Age");
+        field.setFieldType("Double");
+        field.setIsRequired(true);
+        values = new LinkedList<>();
+        values.add(new AllowedValue("1", "33.1"));
+        values.add(new AllowedValue("2", "33.2"));
+        values.add(new AllowedValue("3", "33.3"));
+        values.add(new AllowedValue("4", "33.4"));
+        field.setDefinedValues(values);
+        values1 = new LinkedList<>();
+        values1.add("1");
+        values1.add("2");
+        values1.add("3");
+        values1.add("4");
+        field.setValue(values1);
+        fields.add(field);
+
         return fields;
     }
 
