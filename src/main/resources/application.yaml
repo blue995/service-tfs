@@ -1,7 +1,9 @@
 # Server Configuration
 server:
-  port: 8080
-
+  port: 8888
+management:
+  security:
+    enabled: false
 # Eureka Configuration
 eureka:
   instance:
