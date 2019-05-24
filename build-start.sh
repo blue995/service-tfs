@@ -2,7 +2,8 @@
 
 DIR="build/libs"
 SERVICE="service-delegation-4.3.0-SNAPSHOT"
+BASEDIR=$(dirname "$0")
+$BASEDIR/build.sh
 
-./build.sh
 
-java -jar "$DIR/$SERVICE.jar"
+java -jar "$BASEDIR/$DIR/$SERVICE.jar"

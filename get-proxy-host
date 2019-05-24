@@ -1,0 +1,16 @@
+#!/usr/bin/python3.6
+
+import os
+from urllib.parse import urlparse
+
+uri = os.environ['PROXY_HOST']
+result = urlparse(uri)
+
+host, port = result.netloc.split(':')
+
+if not "@" in host:
+	print(host)
+	exit()
+
+user, h  = host.split("@")
+print(h)

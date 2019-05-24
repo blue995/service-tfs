@@ -1,0 +1,15 @@
+#!/usr/bin/python3.6
+
+import os
+from urllib.parse import urlparse
+
+uri = os.environ['PROXY_HOST']
+result = urlparse(uri)
+
+if not ":" in result.netloc:
+	print(80)
+	exit()
+
+head, port = result.netloc.split(':')
+
+print(port)
