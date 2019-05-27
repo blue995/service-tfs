@@ -1,7 +1,6 @@
 package com.epam.reportportal.extension.bugtracking.delegation.services;
 
 import com.epam.ta.reportportal.database.entity.ExternalSystem;
-import com.epam.ta.reportportal.ws.model.externalsystem.AllowedValue;
 import com.epam.ta.reportportal.ws.model.externalsystem.PostFormField;
 import com.epam.ta.reportportal.ws.model.externalsystem.PostTicketRQ;
 import com.epam.ta.reportportal.ws.model.externalsystem.Ticket;
@@ -14,26 +13,19 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TfsExternalApi implements IExternalSystemApi {
-    private Map<String, Ticket> ticketStore = new HashMap<>();
-    private int id = 0;
-
     @Value("${rp.bts.tfs.service.url}")
     private String microServiceUrl;
-    @Value("${rp.bts.tfs.server.url}")
-    private String tfsServerUrl;
-    @Value("${rp.bts.tfs.project}")
-    private String tfsProject;
-
 
     public List<String> getIssueTypes(ExternalSystem system) {
         RestTemplate template = new RestTemplate();
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(microServiceUrl + "/api/issuetypes")
-                .queryParam("uri", tfsServerUrl);
+        String path = microServiceUrl + "/api/issuetypes";
+        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
 
         try {
             ResponseEntity<List<String>> response = template.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>() {});
@@ -48,10 +40,8 @@ public class TfsExternalApi implements IExternalSystemApi {
     @Override
     public List<PostFormField> getTicketFields(String issueType, ExternalSystem system) {
         RestTemplate template = new RestTemplate();
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(microServiceUrl + "/api/ticketfields/")
-                .queryParam("uri", tfsServerUrl)
-                .queryParam("project", tfsProject);
+        String path = microServiceUrl + "/api/ticketfields";
+        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
 
         try {
             ResponseEntity<List<PostFormField>> response = template.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<PostFormField>>() {});
@@ -66,29 +56,17 @@ public class TfsExternalApi implements IExternalSystemApi {
     @Override
     public Ticket submitTicket(PostTicketRQ ticketRQ, ExternalSystem system) {
         RestTemplate template = new RestTemplate();
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(microServiceUrl + "/api/ticket")
-                .queryParam("uri", tfsServerUrl)
-                .queryParam("project", tfsProject);
+        String path = microServiceUrl + "/api/ticket";
+        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
 
-        ResponseEntity<Ticket> responseEntity;
-        try {
-            responseEntity = template.postForEntity(builder.toUriString(), ticketRQ, Ticket.class);
-        } catch (RestClientException e) {
-            e.printStackTrace();
-            System.out.println("MESSAGE: " + e.getMessage());
-            throw e;
-        }
-        return responseEntity.getBody();
+        return template.postForObject(builder.toUriString(), ticketRQ, Ticket.class);
     }
 
     @Override
     public Optional<Ticket> getTicket(String id, ExternalSystem system) {
         RestTemplate template = new RestTemplate();
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(microServiceUrl + "/api/ticket/" + id)
-                .queryParam("uri", tfsServerUrl)
-                .queryParam("project", tfsProject);
+        String path = microServiceUrl + "/api/ticket/" + id;
+        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
 
         try {
             return Optional.of(template.getForObject(builder.toUriString(), Ticket.class));
@@ -101,6 +79,9 @@ public class TfsExternalApi implements IExternalSystemApi {
 
     @Override
     public boolean checkConnection(ExternalSystem system) {
-        return system.getUsername().equals("admin") && system.getPassword().equals("password");
+        RestTemplate template = new RestTemplate();
+        String path = microServiceUrl + "/api/welcome";
+        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
+        return template.getForObject(builder.toUriString(), Boolean.class);
     }
 }

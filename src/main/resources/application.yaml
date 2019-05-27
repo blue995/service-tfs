@@ -49,10 +49,7 @@ rp:
   bts:
     tfs:
       service:
-        url: ${rp.bts.tfs.service.url}
-      server:
-        url: ${rp.bts.tfs.server.url}
-      project: ${rp.bts.tfs.project}
+        url: ${rp.tfs.microservice.url}
 
 spring:
   cloud:
