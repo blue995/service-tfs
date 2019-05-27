@@ -71,7 +71,15 @@ public class TfsExternalApi implements IExternalSystemApi {
                 .queryParam("uri", tfsServerUrl)
                 .queryParam("project", tfsProject);
 
-        return template.postForObject(builder.toUriString(), ticketRQ, Ticket.class);
+        ResponseEntity<Ticket> responseEntity;
+        try {
+            responseEntity = template.postForEntity(builder.toUriString(), ticketRQ, Ticket.class);
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            System.out.println("MESSAGE: " + e.getMessage());
+            throw e;
+        }
+        return responseEntity.getBody();
     }
 
     @Override
