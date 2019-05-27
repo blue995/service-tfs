@@ -1,5 +1,6 @@
 package com.epam.reportportal.extension.bugtracking.delegation.services;
 
+import com.epam.ta.reportportal.ws.model.externalsystem.PostFormField;
 import com.epam.ta.reportportal.ws.model.externalsystem.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -46,6 +47,21 @@ public class MyEndPoint {
                 .queryParam("uri", tfs_url)
                 .queryParam("project", project);
         ResponseEntity<List<String>> response = tmpl.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>() {});
+        return response.getBody() ;
+    }
+
+    @RequestMapping("/test/f")
+    public List<PostFormField> hello2(){
+        RestTemplate tmpl = new RestTemplate();
+        String service_url = env.getProperty("rp.bts.tfs.service_url");
+        String tfs_url = env.getProperty("rp.bts.tfs.server_url");
+        String project = env.getProperty("rp.bts.tfs.project");
+
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(service_url + "/api/ticketfields")
+                .queryParam("uri", tfs_url)
+                .queryParam("project", project);
+        ResponseEntity<List<PostFormField>> response = tmpl.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<PostFormField>>() {});
         return response.getBody() ;
     }
 }
