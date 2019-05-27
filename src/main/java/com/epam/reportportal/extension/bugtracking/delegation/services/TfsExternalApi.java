@@ -65,14 +65,13 @@ public class TfsExternalApi implements IExternalSystemApi {
 
     @Override
     public Ticket submitTicket(PostTicketRQ ticketRQ, ExternalSystem system) {
-        Ticket t = new Ticket();
-        id++;
-        t.setId(Integer.toString(id));
-        t.setStatus("Created");
-        t.setTicketUrl("urL:" + id);
-        t.setSummary(ticketRQ.toString());
-        ticketStore.put(t.getId(), t);
-        return t;
+        RestTemplate template = new RestTemplate();
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(microServiceUrl + "/api/ticket")
+                .queryParam("uri", tfsServerUrl)
+                .queryParam("project", tfsProject);
+
+        return template.postForObject(builder.toUriString(), ticketRQ, Ticket.class);
     }
 
     @Override
