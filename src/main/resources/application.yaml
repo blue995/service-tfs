@@ -46,6 +46,13 @@ rp:
       user:
         size: 1000
         expiration: 60
+  bts:
+    tfs:
+      service:
+        url: ${rp.bts.tfs.service.url}
+      server:
+        url: ${rp.bts.tfs.server.url}
+      project: ${rp.bts.tfs.project}
 
 spring:
   cloud:
