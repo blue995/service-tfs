@@ -26,6 +26,12 @@ public class MyEndPoint {
     @Value("rp.bts.tfs.project")
     private String tfsProject;
 
+    public MyEndPoint(){
+        System.out.println(1 + ": '" + microServiceUrl + "'");
+        System.out.println(2 + ": '" + tfsServerUrl + "'");
+        System.out.println(3 + ": '" + tfsProject + "'");
+    }
+
     @RequestMapping("/test/{id}")
     public Ticket hello(@PathVariable String id){
         RestTemplate tmpl = new RestTemplate();
