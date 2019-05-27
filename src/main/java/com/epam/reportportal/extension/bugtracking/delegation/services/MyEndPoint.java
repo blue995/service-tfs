@@ -19,11 +19,11 @@ import java.util.List;
 
 @RestController
 public class MyEndPoint {
-    @Value("rp.bts.tfs.service.url")
+    @Value("${rp.bts.tfs.service.url}")
     private String microServiceUrl;
-    @Value("rp.bts.tfs.server.url")
+    @Value("${rp.bts.tfs.server.url}")
     private String tfsServerUrl;
-    @Value("rp.bts.tfs.project")
+    @Value("${rp.bts.tfs.project}")
     private String tfsProject;
 
     public MyEndPoint(){
