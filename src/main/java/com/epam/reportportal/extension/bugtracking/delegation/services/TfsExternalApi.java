@@ -21,9 +21,9 @@ public class TfsExternalApi implements IExternalSystemApi {
     private Map<String, Ticket> ticketStore = new HashMap<>();
     private int id = 0;
 
-    @Value("rp.bts.tfs.service_url")
+    @Value("rp.bts.tfs.service.url")
     private String microServiceUrl;
-    @Value("rp.bts.tfs.server_url")
+    @Value("rp.bts.tfs.server.url")
     private String tfsServerUrl;
     @Value("rp.bts.tfs.project")
     private String tfsProject;

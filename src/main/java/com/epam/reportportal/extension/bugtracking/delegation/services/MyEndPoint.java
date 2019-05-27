@@ -3,6 +3,7 @@ package com.epam.reportportal.extension.bugtracking.delegation.services;
 import com.epam.ta.reportportal.ws.model.externalsystem.PostFormField;
 import com.epam.ta.reportportal.ws.model.externalsystem.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -18,34 +19,32 @@ import java.util.List;
 
 @RestController
 public class MyEndPoint {
-    @Autowired
-    private Environment env;
+    @Value("rp.bts.tfs.service.url")
+    private String microServiceUrl;
+    @Value("rp.bts.tfs.server.url")
+    private String tfsServerUrl;
+    @Value("rp.bts.tfs.project")
+    private String tfsProject;
 
     @RequestMapping("/test/{id}")
     public Ticket hello(@PathVariable String id){
         RestTemplate tmpl = new RestTemplate();
-        String service_url = env.getProperty("rp.bts.tfs.service_url");
-        String tfs_url = env.getProperty("rp.bts.tfs.server_url");
-        String project = env.getProperty("rp.bts.tfs.project");
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(service_url + "/api/ticket/" + id)
-                .queryParam("uri", tfs_url)
-                .queryParam("project", project);
+                .fromUriString(microServiceUrl + "/api/ticket/" + id)
+                .queryParam("uri", tfsServerUrl)
+                .queryParam("project", tfsProject);
         return tmpl.getForObject(builder.toUriString(), Ticket.class);
     }
 
     @RequestMapping("/test")
     public List<String> hello(){
         RestTemplate tmpl = new RestTemplate();
-        String service_url = env.getProperty("rp.bts.tfs.service_url");
-        String tfs_url = env.getProperty("rp.bts.tfs.server_url");
-        String project = env.getProperty("rp.bts.tfs.project");
 
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(service_url + "/api/issuetypes")
-                .queryParam("uri", tfs_url)
-                .queryParam("project", project);
+                .fromUriString(microServiceUrl + "/api/issuetypes")
+                .queryParam("uri", tfsServerUrl)
+                .queryParam("project", tfsProject);
         ResponseEntity<List<String>> response = tmpl.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>() {});
         return response.getBody() ;
     }
@@ -53,14 +52,10 @@ public class MyEndPoint {
     @RequestMapping("/test/f")
     public List<PostFormField> hello2(){
         RestTemplate tmpl = new RestTemplate();
-        String service_url = env.getProperty("rp.bts.tfs.service_url");
-        String tfs_url = env.getProperty("rp.bts.tfs.server_url");
-        String project = env.getProperty("rp.bts.tfs.project");
-
         UriComponentsBuilder builder = UriComponentsBuilder
-                .fromUriString(service_url + "/api/ticketfields")
-                .queryParam("uri", tfs_url)
-                .queryParam("project", project);
+                .fromUriString(microServiceUrl + "/api/ticketfields")
+                .queryParam("uri", tfsServerUrl)
+                .queryParam("project", tfsProject);
         ResponseEntity<List<PostFormField>> response = tmpl.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<PostFormField>>() {});
         return response.getBody() ;
     }
