@@ -22,11 +22,22 @@ This separate TFS RESTful-Web API can be written in any programming language tha
 To configure the URL of the TFS RESTful-Web API you have to set the `RP_TFS_MICROSERVICE_URL` environment variable in the docker container.
 (e.g. `RP_TFS_MICROSERVICE_URL=http://my-tfs-api-domain.tld:8090`)
 
-## Docker image
+## How can you use it?
+ 
+1. Use the **default implementation** of the [TfsExternalApi](https://github.com/blue995/service-tfs/blob/master/src/main/java/com/epam/reportportal/extension/bugtracking/delegation/services/TfsExternalApi.java).
+Just integrate the docker image of this project into your docker-compose-yml configuration (example config below).
+2. Fork this project and **create your own TFS interaction** by implementing the [IExternalSystemApi](https://github.com/blue995/service-tfs/blob/master/src/main/java/com/epam/reportportal/extension/bugtracking/delegation/services/IExternalSystemApi.java) interface and injecting it into the [DelegationStrategy](https://github.com/blue995/service-tfs/blob/master/src/main/java/com/epam/reportportal/extension/bugtracking/delegation/services/DelegationStrategy.java) component.
+Build the docker image via `docker build -f docker/Dockerfile`.
+
+## Default implementation
+
+- [TfsExternalApi](https://github.com/blue995/service-tfs/blob/master/src/main/java/com/epam/reportportal/extension/bugtracking/delegation/services/TfsExternalApi.java)
+
+### Docker image
 
 The docker image is called `bluefu/service-tfs` and can be found [here](https://cloud.docker.com/u/bluefu/repository/docker/bluefu/service-tfs) on DockerHub.
 
-## Example configuration in docker-compose
+### Example configuration in docker-compose
 
 An example configuration of a `docker-compose.yml` file could look like this:
 
@@ -40,13 +51,13 @@ An example configuration of a `docker-compose.yml` file could look like this:
     restart: always
 ```
 
-## Documentation of separate TFS RESTful-Web API
+### Documentation of separate TFS RESTful-Web API
 
 This is a documentation how you should design your separate TFS RESTful-Web API.
 
 **Hint**: RAML documentation will follow soon.
 
-### General Query Parameters
+#### General Query Parameters
 
 Each request contains the URI and the project you've configured in the BTS dialogue in ReportPortal as query parameters.
 
@@ -55,7 +66,7 @@ Each request contains the URI and the project you've configured in the BTS dialo
 - `uri`: URI of the TFS server (e.g. `https://my-tfs-server.tld/tfs/Example`)
 - `project`: Target project on the TFS server (e.g. `myproject`)
 
-### Get Issue Types
+#### Get Issue Types
 
 **Definition**
 
@@ -66,7 +77,7 @@ Each request contains the URI and the project you've configured in the BTS dialo
 - `200 Ok` on success.
 - Return: List of `String` objects
 
-### Get Ticket Fields
+#### Get Ticket Fields
 
 **Definition**
 
@@ -81,7 +92,7 @@ Each request contains the URI and the project you've configured in the BTS dialo
 - `200 Ok` on success.
 - Return: List of `PostFormField` objects
 
-### Get Ticket by ID
+#### Get Ticket by ID
 
 **Definition**
 
@@ -92,7 +103,7 @@ Each request contains the URI and the project you've configured in the BTS dialo
 - `200 Ok` on success.
 - Return: `Ticket` object.
 
-### Create Ticket
+#### Create Ticket
 
 **Definition**
 
@@ -107,7 +118,7 @@ Each request contains the URI and the project you've configured in the BTS dialo
 - `201 Created` on success.
 - Return: `Ticket` object.
 
-### Check connection to TFS server
+#### Check connection to TFS server
 
 **Definition**
 
