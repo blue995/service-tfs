@@ -16,10 +16,10 @@ Because of this the official TFS microservice is not compatible with later versi
 ## How does it work?
 
 This microservice delegates each request to a separate TFS RESTful-Web API.
-This separate TFS RESTful-Web API can ve written in any programming language that has better support for interactions with TFS than Java.
+This separate TFS RESTful-Web API can be written in any programming language that has better support for interactions with TFS than Java.
 (e.g. C#, Python, ...)
 
-To configure the URL of the TFS RESTful-Web API you have to set the `RP_TFS_MICROSERVICE_URL` environment variable.
+To configure the URL of the TFS RESTful-Web API you have to set the `RP_TFS_MICROSERVICE_URL` environment variable in the docker container.
 (e.g. `RP_TFS_MICROSERVICE_URL=http://my-tfs-api-domain.tld:8090`)
 
 ## Docker image
