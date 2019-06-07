@@ -9,7 +9,7 @@ The original [service-tfs](https://github.com/reportportal/service-tfs) microser
 The reason for this was explained in the official Slack channel by [Dzmitry Humianiuk](https://github.com/DzmitryHumianiuk):
 "*[...] there is no active plans for it. official sdk has memory leak issues and laters update were in 2013.*"
 
-Because of this the TFS microservice was not compatible with later versions of ReportPortal.
+Because of this the official TFS microservice is not compatible with later versions of ReportPortal.
 
 **This** project brings back the TFS microservice in ReportPortal without the deprecated TFS-JDK from Microsoft.
 
