@@ -25,7 +25,7 @@ public class TfsExternalApi implements IExternalSystemApi {
     public List<String> getIssueTypes(ExternalSystem system) {
         RestTemplate template = new RestTemplate();
         String path = microServiceUrl + "/api/issuetypes";
-        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
+        UriComponentsBuilder builder = getUriBuilder(path, system);
 
         try {
             ResponseEntity<List<String>> response = template.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<String>>() {});
@@ -41,7 +41,8 @@ public class TfsExternalApi implements IExternalSystemApi {
     public List<PostFormField> getTicketFields(String issueType, ExternalSystem system) {
         RestTemplate template = new RestTemplate();
         String path = microServiceUrl + "/api/ticketfields";
-        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
+        UriComponentsBuilder builder = getUriBuilder(path, system);
+        builder.queryParam("type", issueType);
 
         try {
             ResponseEntity<List<PostFormField>> response = template.exchange(builder.toUriString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<PostFormField>>() {});
@@ -57,7 +58,7 @@ public class TfsExternalApi implements IExternalSystemApi {
     public Ticket submitTicket(PostTicketRQ ticketRQ, ExternalSystem system) {
         RestTemplate template = new RestTemplate();
         String path = microServiceUrl + "/api/ticket";
-        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
+        UriComponentsBuilder builder = getUriBuilder(path, system);
 
         return template.postForObject(builder.toUriString(), ticketRQ, Ticket.class);
     }
@@ -66,7 +67,7 @@ public class TfsExternalApi implements IExternalSystemApi {
     public Optional<Ticket> getTicket(String id, ExternalSystem system) {
         RestTemplate template = new RestTemplate();
         String path = microServiceUrl + "/api/ticket/" + id;
-        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
+        UriComponentsBuilder builder = getUriBuilder(path, system);
 
         try {
             return Optional.of(template.getForObject(builder.toUriString(), Ticket.class));
@@ -81,7 +82,14 @@ public class TfsExternalApi implements IExternalSystemApi {
     public boolean checkConnection(ExternalSystem system) {
         RestTemplate template = new RestTemplate();
         String path = microServiceUrl + "/api/welcome";
-        UriComponentsBuilder builder = UriUtils.getUriBuilder(path, system);
+        UriComponentsBuilder builder = getUriBuilder(path, system);
         return template.getForObject(builder.toUriString(), Boolean.class);
+    }
+
+    private static UriComponentsBuilder getUriBuilder(String path, ExternalSystem system){
+        return UriComponentsBuilder
+                .fromUriString(path)
+                .queryParam("uri", system.getUrl())
+                .queryParam("project", system.getProject());
     }
 }
